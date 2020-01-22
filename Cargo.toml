@@ -1,0 +1,15 @@
+[package]
+edition = "2018"
+name = "rhs_first_assign"
+version = "0.0.0"
+authors = ["Ryo Yamashita <qryxip@gmail.com>"]
+readme = "README.md"
+keywords = ["macro"]
+categories = ["development-tools", "rust-patterns"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/qryxip/rhs_first_assign"
+
+[lib]
+proc-macro = true
+
+[dependencies]
