@@ -6,6 +6,70 @@
 [![Crates.io](https://img.shields.io/badge/crates.io-not%20yet-inactive)](https://crates.io)
 [![License](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-informational)](https://crates.io)
 
+An attribute macro to hack compound assignment.
+
+## Motivation
+
+```rust
+use std::num::Wrapping;
+
+fn main() {
+    let mut xs = vec![Wrapping(1), Wrapping(2)];
+
+    // OK
+    xs[1] = xs[0] + xs[1];
+
+    // Error
+    xs[1] += xs[0];
+}
+```
+
+```
+error[E0502]: cannot borrow `xs` as immutable because it is also borrowed as mutable
+  --> src/main.rs:10:14
+   |
+10 |     xs[1] += xs[0];
+   |     ---------^^---
+   |     |        |
+   |     |        immutable borrow occurs here
+   |     mutable borrow occurs here
+   |     mutable borrow later used here
+```
+
+## Usage
+
+```rust
+use rhs_first_assign::rhs_first_assign;
+
+use std::num::Wrapping;
+
+#[rhs_first_assign]
+fn main() {
+    let mut xs = vec![Wrapping(1), Wrapping(2)];
+
+    xs[1] = xs[0] + xs[1];
+
+    xs[1] += xs[0];
+}
+```
+
+↓
+
+```rust
+use std::num::Wrapping;
+
+fn main() {
+    let mut xs = vec![Wrapping(1), Wrapping(2)];
+
+    xs[1] = xs[0] + xs[1];
+
+    {
+        let __rhs_first_assign_rhs_l11_c10 = xs[0];
+        xs[1] += __rhs_first_assign_rhs_l11_c10;
+    };
+}
+```
+
 ## License
 
 Licensed under <code>[MIT](https://opensource.org/licenses/MIT) OR [Apache-2.0](http://www.apache.org/licenses/LICENSE-2.0)</code>.
