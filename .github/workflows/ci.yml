@@ -129,7 +129,7 @@ jobs:
           default: true
           profile: minimal
 
-      - name: '`cargo publish -v --token ${{ secrets.CRATES_IO_TOKEN }}`'
+      - name: '`cargo publish -v --token "$CRATES_IO_TOKEN"`'
         uses: actions-rs/cargo@v1
         with:
           command: publish
